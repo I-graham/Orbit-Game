@@ -1,0 +1,8 @@
+canvas {
+	border: 1pt solid black;
+	display: block;
+	margin: auto;
+	width: 600px;
+	height: 600px;
+	padding: 0;
+}
