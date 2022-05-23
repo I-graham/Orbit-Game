@@ -10,6 +10,8 @@ let ship = {
 
 let start, previousTimeStamp;
 function step(timestamp) {
+	ctx.save();
+
 	ctx.fillStyle = 'rgb(0,0,0)';
 	ctx.fillRect(-gdims.x / 2, -gdims.y / 2, gdims.x, gdims.y);
 	ui.update();
@@ -21,7 +23,6 @@ function step(timestamp) {
 	start = timestamp;
 
 	ship.pos = ui.mouse;
-	console.log(ui.mouse);
 	ship.draw();
 
 	if (ui.debug) {
@@ -33,6 +34,7 @@ function step(timestamp) {
 		ctx.restore();
 	}
 
+	ctx.restore();
 	window.requestAnimationFrame(step);
 }
 

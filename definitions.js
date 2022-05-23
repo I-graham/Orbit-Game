@@ -25,12 +25,24 @@ ctx.restore();
 let ui = {
 	debug: false,
 	mouse: v(0),
+	cam_pos: v(0),
 	keyMap: {},
+	keyUpFuncs: {},
+	keyDownFuncs: {},
+	getKey: function (c) {
+		if (!this.keyMap[c]) {
+			this.keyMap[c] = { down: false, count: 0 }
+		}
+		return this.keyMap[c];
+	},
 	update: function () {
-		this.debug = this.keyMap[toCode('D')]?.count % 2 != 0;
+		ctx.translate(this.cam_pos.x, this.cam_pos.y);
 	},
 }
 
+ui.keyUpFuncs[toCode('D')] = (ui) => { ui.debug = ui.getKey(toCode('D')).count % 2 != 0; };
+
+/* Boilerplate */
 function toCode(ch) {
 	let str = "" + ch;
 	return str.charCodeAt(str[0]);
@@ -45,15 +57,24 @@ function capMouse(e) {
 }
 
 function keyDown(e) {
-	let count = ui.keyMap[e.keyCode]?.count || 0;
-	ui.keyMap[e.keyCode] = { down: true, count };
+	let count = ui.getKey(e.keyCode).count;
+	ui.keyMap[e.keyCode] = {
+		down: true,
+		count: ui.getKey(e.keyCode).count
+	};
+	if (ui.keyDownFuncs[e.keyCode]) {
+		ui.keyDownFuncs[e.keyCode](ui);
+	}
 }
 
 function keyUp(e) {
 	ui.keyMap[e.keyCode] = {
 		down: false,
-		count: ui.keyMap[e.keyCode].count + 1
+		count: ui.getKey(e.keyCode).count + 1
 	};
+	if (ui.keyUpFuncs[e.keyCode]) {
+		ui.keyUpFuncs[e.keyCode](ui);
+	}
 }
 
 window.addEventListener("keydown", keyDown, false);
