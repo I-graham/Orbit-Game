@@ -5,18 +5,22 @@ const vsub = (a, b) => vadd(a, vneg(b));
 const vmul = (a, b) => ({ x: a.x * b.x, y: a.y * b.y });
 const vdiv = (a, b) => ({ x: a.x / b.x, y: a.y / b.y });
 const vscl = (c, u) => vmul(v(c), u);
+const negy = (u) => vmul(v(1, -1), u);
+const arr = (u) => [u.x, u.y];
 
 let canvas = document.getElementById('screen');
-let ctx = canvas.getContext('2d', { alpha: false });
 canvas.width = 1500;
 canvas.height = 1500;
 canvas.style.width = '750px';
 canvas.style.height = '750px';
+canvas.style.cursor = 'none';
 
 let cdims = v(canvas.width, canvas.height);
 let gdims = v(20, 20);
 
-ctx.scale(cdims.x / gdims.x, -cdims.y / gdims.y);
+
+let ctx = canvas.getContext('2d', { alpha: false });
+ctx.scale(...arr(negy(vdiv(cdims, gdims))));
 ctx.translate(gdims.x / 2, -gdims.y / 2);
 
 ctx.save();
@@ -35,12 +39,18 @@ let ui = {
 		}
 		return this.keyMap[c];
 	},
+	getPKey: function (c) {
+		return this.getKey(toCode(c));
+	},
 	update: function () {
-		ctx.translate(this.cam_pos.x, this.cam_pos.y);
+		ctx.translate(...arr(this.cam_pos));
 	},
 }
 
-ui.keyUpFuncs[toCode('D')] = (ui) => { ui.debug = ui.getKey(toCode('D')).count % 2 != 0; };
+ui.keyUpFuncs[toCode('I')] = (ui) => {
+	ui.debug = ui.getPKey('I').count % 2 != 0;
+	canvas.style.cursor = ui.debug ? 'crosshair' : 'none';
+};
 
 /* Boilerplate */
 function toCode(ch) {
@@ -57,7 +67,6 @@ function capMouse(e) {
 }
 
 function keyDown(e) {
-	let count = ui.getKey(e.keyCode).count;
 	ui.keyMap[e.keyCode] = {
 		down: true,
 		count: ui.getKey(e.keyCode).count
