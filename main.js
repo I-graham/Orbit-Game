@@ -99,7 +99,7 @@ const world = {
 			`position : (${arr(intv(ship.pos))})`,
 			`velocity : (${arr(intv(ship.vel))})`,
 			`speed    : ${vlen(ship.vel).toFixed(1)}`,
-			`angle    : ${deg(ship.dir).toFixed(0)}\xB0`,
+			`angle    : ${(deg(ship.dir) % 360).toFixed(0)}\xB0`,
 			`ang. vel : ${deg(ship.ang_vel).toFixed(1)}`,
 		];
 		for (let i = 0; i < texts.length; i++) {
