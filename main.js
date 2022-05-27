@@ -40,7 +40,7 @@ const world = {
 		ship.update(timestep);
 
 		//squircle fun
-		const MAX = 8;
+		const MAX = 7.5;
 		let d = vsub(ship.pos, this.cam_pos)
 		d = vpow(d, 6);
 		d = Math.pow(d.x + d.y, 1 / 6);
@@ -69,22 +69,46 @@ const world = {
 		ctx.translate(...arr(vneg(this.cam_pos)));
 		ship.draw();
 		ctx.restore();
-		ctx.save();
 
+		ctx.scale(.5, -.5);
+		ctx.font = "1px monospace";
 		if (ui.debug) {
-			ctx.scale(.5, -.5);
-			ctx.font = "1px Arial";
 			ctx.fillStyle = 'green';
 			const texts = [
 				`FPS: ${Number.parseInt(fps)}`,
 				`X,Y: ${arr(intv(ship.pos))}`,
 				`Cam: ${arr(intv(world.cam_pos))}`
 			];
-			for (let i = 0; i < texts.length; i++) {
-				ctx.fillText(texts[i], -19.5, -19 + i);
+			for (let i = texts.length - 1; i >= 0; i--) {
+				ctx.fillText(texts[i], -19.5, 19.5 - i);
 			}
 		}
-		ctx.restore();
+
+
+		//HUD/Stox box
+		let col = '120,140,250';
+		ctx.fillStyle = `rgba(${col},0.25)`;
+		ctx.strokeStyle = `rgba(${col},0.5)`;
+		ctx.lineWidth = .25;
+		ctx.roundRect(-18.5, -18.5, 13, 8.25, 0.25);
+		ctx.fill();
+		ctx.stroke();
+
+		ctx.fillStyle = `white`;
+		const texts = [
+			`position : (${arr(intv(ship.pos))})`,
+			`velocity : (${arr(intv(ship.vel))})`,
+			`speed    : ${vlen(ship.vel).toFixed(1)}`,
+			`angle    : ${deg(ship.dir).toFixed(0)}\xB0`,
+			`ang. vel : ${deg(ship.ang_vel).toFixed(1)}`,
+		];
+		for (let i = 0; i < texts.length; i++) {
+			ctx.fillText(texts[i], -17.75, -17 + 1.5 * i);
+		}
+
+
+
+		ctx.scale(2, -2);
 	}
 };
 
