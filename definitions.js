@@ -1,11 +1,11 @@
 const v = (x, y) => ({ x, y: y || x });
 const angv = (a, m) => vscl(m, v(Math.sin(a), Math.cos(a)));
+const vdec = (u) => [Math.atan2(...arr(u)), vlen(u)];
 const vneg = (u) => ({ x: -u.x, y: -u.y });
 const vadd = (a, b) => ({ x: a.x + b.x, y: a.y + b.y });
 const vsub = (a, b) => vadd(a, vneg(b));
 const vmul = (a, b) => ({ x: a.x * b.x, y: a.y * b.y });
 const vdiv = (a, b) => ({ x: a.x / b.x, y: a.y / b.y });
-const vmod = (a, b) => ({ x: a.x % b.x, y: a.y % b.y });
 const vscl = (c, u) => vmul(v(c), u);
 const negy = (u) => vmul(v(1, -1), u);
 const vlen = (u) => dist(u, v(0));
@@ -18,6 +18,8 @@ const dist = (a, b) => {
 	return Math.sqrt(dot.x + dot.y);
 };
 const arr = (u) => [u.x, u.y];
+const pos_mod = (a, b) => (b + a % b) % b;
+
 
 function dbg(x) {
 	console.log("dbg!");
@@ -63,6 +65,8 @@ ui.keyUpFuncs[ccode('I')] = (ui) => {
 };
 
 /* helpers */
+const SHIFT_KC = 16;
+
 function ccode(ch) {
 	let str = "" + ch;
 	return str.charCodeAt(str[0]);

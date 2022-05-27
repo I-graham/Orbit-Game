@@ -4,10 +4,10 @@ const ship = {
 	dir: 0,
 	ang_vel: 0,
 	update: function (ts) {
-		let torque = ui.pkey('D').down - ui.pkey('A').down;
+		let acc = angv(this.dir, ui.pkey(' ').down * 2 - ui.key(16).down * 1.5);
 
-		let acc = angv(this.dir, ui.pkey(' ').down);
-		acc = vadd(acc, angv(this.dir + torque * (Math.PI / 10), torque && 0.75));
+		let torque = ui.pkey('D').down - ui.pkey('A').down;
+		acc = vadd(acc, angv(this.dir + torque * (Math.PI / 10), torque && 1));
 
 		this.pos = vadd(this.pos, vscl(ts, this.vel));
 		this.vel = vadd(this.vel, vscl(ts, acc));
@@ -19,6 +19,15 @@ const ship = {
 	draw: function () {
 		ctx.beginPath();
 		ctx.fillStyle = 'white';
+
+		if (ui.key(SHIFT_KC).down)
+			drawImage(
+				images['flame'],
+				...arr(negy(
+					vadd(this.pos, angv(this.dir, 0.25))
+				)),
+				.8, 2, this.dir + Math.PI);
+
 		drawImage(images['rocket'], ...arr(negy(this.pos)), 1, 2, this.dir);
 
 		const rotdir = ui.pkey('D').down - ui.pkey('A').down;
@@ -27,6 +36,7 @@ const ship = {
 
 		if (ui.pkey(' ').down)
 			drawImage(images['flame'], ...arr(negy(this.pos)), 1, 2, this.dir);
+
 
 
 		ctx.fill();
@@ -40,13 +50,14 @@ const world = {
 		ship.update(timestep);
 
 		//squircle fun
-		const MAX = 7.5;
+		//makes camera to follow ship
+		const MAX_DIST = 7.5;
 		let d = vsub(ship.pos, this.cam_pos)
 		d = vpow(d, 6);
 		d = Math.pow(d.x + d.y, 1 / 6);
-		if (d > MAX) {
+		if (d > MAX_DIST) {
 			let dir = vsub(ship.pos, this.cam_pos);
-			let diff = vscl(d - MAX, unit(dir));
+			let diff = vscl(d - MAX_DIST, unit(dir));
 			this.cam_pos = vadd(this.cam_pos, diff);
 		}
 	},
@@ -55,8 +66,6 @@ const world = {
 
 		for (let s of this.stars) {
 			ctx.fillStyle = 'white';
-
-			const pos_mod = (a, b) => (b + a % b) % b;
 
 			ctx.beginPath();
 			let xc = pos_mod(s.x - this.cam_pos.x, 1.5 * gdims.x) - gdims.x * .75;
@@ -79,31 +88,33 @@ const world = {
 				`X,Y: ${arr(intv(ship.pos))}`,
 				`Cam: ${arr(intv(world.cam_pos))}`
 			];
-			for (let i = texts.length - 1; i >= 0; i--) {
-				ctx.fillText(texts[i], -19.5, 19.5 - i);
+			for (let i = 0; i < texts.length; i++) {
+				ctx.fillText(texts[i], -19.5, -19 + i);
 			}
 		}
 
 
-		//HUD/Stox box
+		//HUD
+		//Coordinates are trial&error-ed, but no one has to know
 		let col = '120,140,250';
 		ctx.fillStyle = `rgba(${col},0.25)`;
 		ctx.strokeStyle = `rgba(${col},0.5)`;
 		ctx.lineWidth = .25;
-		ctx.roundRect(-18.5, -18.5, 13, 8.25, 0.25);
+		ctx.roundRect(-19, 9.2, 15, 9.5, 0.25);
 		ctx.fill();
 		ctx.stroke();
 
 		ctx.fillStyle = `white`;
 		const texts = [
-			`position : (${arr(intv(ship.pos))})`,
-			`velocity : (${arr(intv(ship.vel))})`,
-			`speed    : ${vlen(ship.vel).toFixed(1)}`,
-			`angle    : ${(deg(ship.dir) % 360).toFixed(0)}\xB0`,
-			`ang. vel : ${deg(ship.ang_vel).toFixed(1)}`,
+			`position   : (${arr(intv(ship.pos))}) km`,
+			`velocity   : (${arr(intv(ship.vel))}) km`,
+			`speed      : ${vlen(ship.vel).toFixed(1)} km/s`,
+			`vel. angle : ${pos_mod(deg(vdec(ship.vel)[0]), 360).toFixed(0)}\xB0`,
+			`direction  : ${pos_mod(deg(ship.dir), 360).toFixed(0)}\xB0`,
+			`ang. vel   : ${deg(ship.ang_vel).toFixed(1)}\xB0/s`,
 		];
 		for (let i = 0; i < texts.length; i++) {
-			ctx.fillText(texts[i], -17.75, -17 + 1.5 * i);
+			ctx.fillText(texts[i], -18.25, 10.5 + 1.5 * i);
 		}
 
 
