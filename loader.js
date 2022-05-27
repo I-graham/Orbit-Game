@@ -2,7 +2,7 @@ images = {}
 
 for(const filename of [
 	"rocket",
-	"rocket_nf"
+	"flame"
 ]) {
 	let img = new Image();
 	img.src = `assets/${filename}.png`;
