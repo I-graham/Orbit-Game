@@ -1,8 +1,9 @@
 images = {}
 
-for(const filename of [
+for (const filename of [
 	"rocket",
-	"flame"
+	"arrow",
+	"flame",
 ]) {
 	let img = new Image();
 	img.src = `assets/${filename}.png`;

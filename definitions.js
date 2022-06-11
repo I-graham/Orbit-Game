@@ -1,6 +1,11 @@
+const pos_mod = (a, b) => (b + a % b) % b;
+
+//Vector functions to make code more compact
+//Praying no one reads this later and calls me messy
 const v = (x, y) => ({ x, y: y || x });
+const ranv = (l, h) => vadd(l, vmul(vsub(h, l), v(Math.random(), Math.random())));
 const angv = (a, m) => vscl(m, v(Math.sin(a), Math.cos(a)));
-const vdec = (u) => [Math.atan2(...arr(u)), vlen(u)];
+const vdec = (u) => [pos_mod(Math.atan2(...arr(u)), 2 * Math.PI), vlen(u)];
 const vneg = (u) => ({ x: -u.x, y: -u.y });
 const vadd = (a, b) => ({ x: a.x + b.x, y: a.y + b.y });
 const vsub = (a, b) => vadd(a, vneg(b));
@@ -12,17 +17,30 @@ const vlen = (u) => dist(u, v(0));
 const unit = (u) => vscl(1 / vlen(u), u);
 const intv = (u) => ({ x: Math.round(u.x), y: Math.round(u.y) });
 const vpow = (u, n) => ({ x: Math.pow(u.x, n), y: Math.pow(u.y, n) });
+const vmod = (a, b) => ({ x: pos_mod(a.x, b.x), y: pos_mod(a.y, b.y) });
+const toln = (l, u) => vscl(l, unit(u));
 const dist = (a, b) => {
 	let diff = vsub(a, b);
 	let dot = vmul(diff, diff);
 	return Math.sqrt(dot.x + dot.y);
 };
 const arr = (u) => [u.x, u.y];
-const pos_mod = (a, b) => (b + a % b) % b;
+const sign = (x) => x / Math.abs(x);
+const ccw_ordered = (a, b, c) => {
+	if (c > a)
+		return c > b && b > a;
+	else if (c < a) {
+		return (b < c) || (b > a);
+	}
+};
+const rev = (a) => {
+	let c = a.slice(0);
+	c.reverse();
+	return c;
+}
 
 
 function dbg(x) {
-	console.log("dbg!");
 	console.log(x);
 	return x;
 }
@@ -35,8 +53,7 @@ canvas.style.height = '750px';
 canvas.style.cursor = 'none';
 
 const cdims = v(canvas.width, canvas.height);
-const gdims = v(20, 20);
-
+const gdims = v(30, 30);
 
 const ctx = canvas.getContext('2d', { alpha: true });
 ctx.scale(...arr(negy(vdiv(cdims, gdims))));
@@ -59,18 +76,24 @@ const ui = {
 	}
 }
 
-ui.keyUpFuncs[ccode('I')] = (ui) => {
-	ui.debug = ui.pkey('I').count % 2 != 0;
-	canvas.style.cursor = ui.debug ? 'crosshair' : 'none';
-};
-
 /* helpers */
 const SHIFT_KC = 16;
+const ENTER_KC = 13;
 
 function ccode(ch) {
 	let str = "" + ch;
 	return str.charCodeAt(str[0]);
 }
+
+ui.keyUpFuncs[ccode('I')] = (ui) => {
+	ui.debug = ui.pkey('I').count % 2 != 0;
+	canvas.style.cursor = ui.debug ? 'crosshair' : 'none';
+};
+
+ui.keyUpFuncs[ENTER_KC] = (ui) => {
+	ship.landing = ui.key(ENTER_KC).count % 2 != 0;
+	ship.winding = { prev_ang: 0, barrier: 0, count: 0, dir: 0 };
+};
 
 function capMouse(e) {
 	let rect = canvas.getBoundingClientRect();
@@ -126,4 +149,4 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
 	return this;
 }
 
-const deg = (r) => (180 * r / Math.PI)
+const deg = (r) => (180 * r / Math.PI);
