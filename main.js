@@ -125,19 +125,19 @@ const world = {
 		}
 
 		if (ship.dead) {
-			ctx.scale(1, -1);
+			ctx.scale(.2, -.2);
 			ctx.fillStyle = 'rgb(5,0,25)';
-			ctx.fillRect(...arr(vscl(-.5, gdims)), ...arr(gdims));
+			ctx.fillRect(...arr(vscl(-10, gdims)), ...arr(vscl(20, gdims)));
 			ctx.fillStyle = 'rgb(255,255,255)';
-			ctx.fillText(`You crashed :(`, -4, -2);
-			ctx.fillText(`Time: ${((prevts - start) * 1000).toFixed(0)} ms`, -4, 0);
+			ctx.fillText(`You crashed :(`, -30, -20);
+			ctx.fillText(`Time: ${(prevts - start).toFixed(2)} s`, -25, 10);
 			return;
 		}
 
 		if (world.winding.count >= LAP_GOAL) {
 			ctx.scale(.2, -.2);
 			ctx.fillStyle = 'rgb(25,160,0)';
-			ctx.fillRect(...arr(vscl(-10, gdims)), ...arr(vscl(20,gdims)));
+			ctx.fillRect(...arr(vscl(-10, gdims)), ...arr(vscl(20, gdims)));
 			ctx.fillStyle = 'rgb(0,0,0)';
 			ctx.fillText(`You win!`, -20, -2);
 			ctx.fillText(`Orbit reached in ${prevts.toFixed(2)} s`, -50, 10);
@@ -202,7 +202,7 @@ const world = {
 				ctx.save();
 				ctx.fillStyle = `white`;
 				ctx.scale(2, 2);
-				ctx.fillText(`Orbiting! (Lap #${this.winding.count+1})`, -5, 6.525);
+				ctx.fillText(`Orbiting! (Lap #${this.winding.count + 1})`, -5, 6.525);
 				ctx.restore();
 			}
 		}
