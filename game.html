@@ -1,0 +1,40 @@
+<html>
+<style>
+	body {
+		font-family: 'Courier New', monospace;
+		background-color: #000000;
+		color: #FFF39B;
+		justify-content: space-evenly;
+		max-height: 100vh;
+		margin: 0;
+	}
+
+	h1 {
+		font-size: 50px;
+		text-align: center;
+	}
+
+	h2 {
+		color: #FFF5A9;
+	}
+
+	.center {
+		display: inline-block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+</style>
+<title>Orbit Game</title>
+<link rel="stylesheet" href="style.css">
+
+<body>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<h1 style="color: #EAEFFF;"><b><i>Space Race</i></b> </h1>
+	<canvas id="screen" onmousemove="capMouse(event)"></canvas>
+	<script src="definitions.js"></script>
+	<script src="loader.js"></script>
+	<script src="main.js"></script>
+
+</body>
+
+</html>

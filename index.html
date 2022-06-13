@@ -1,15 +1,63 @@
 <html>
+<style>
+	@import url("background.css");
 
-<head>
-	<title>Orbit Game</title>
-	<link rel="stylesheet" href="style.css">
-</head>
+	body {
+		font-family: 'Courier New', monospace;
+		background-color: #000000;
+		color: #FFF39B;
+		justify-content: space-evenly;
+	}
+
+	h1 {
+		font-size: 50px;
+		text-align: center;
+	}
+
+	h2 {
+		color: #FFF5A9;
+	}
+
+	.center {
+		display: inline-block;
+		margin-left: auto;
+		margin-right: auto;
+	}
+</style>
+<title>Orbit Game</title>
+<link rel="stylesheet" href="style.css">
 
 <body>
-	<canvas id="screen" onmousemove="capMouse(event)"></canvas>
-	<script src="definitions.js"></script>
-	<script src="loader.js"></script>
-	<script src="main.js"></script>
+	<div id='stars'></div>
+	<div id='stars2'></div>
+	<div id='stars3'></div>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+	<h1 style="color: #EAEFFF;"><b> Welcome to the <i>Space Race</i>. </b> </h1>
+	<h2><b>A Long Time Ago, in a Galaxy Far, Far Away...</b></h2>
+	<p>
+		...Just kidding. You're actually right here in the Milky Way. Welcome to the Space Race,
+		where you can live your dreams (or nightmares) of finally becoming an astronaut! You are
+		piloting a magical rocket (that does not run on fuel) that was set to explore Mercury. You
+		succeeded your mission, but as you get ready to take off and head back to Earth, you realize
+		your connection with NASA has been cut off! You must get back in Earth’s orbit to regain communication.
+		Your goal is to make it safely into one of Earth’s orbits, making it possible
+		to sustain connection. Good luck, captain!
+	</p>
+	<h2><b>Let's get physical. </b></h2>
+	<p>
+		On the bottom left of your screen, you'll see a small blue box with some numbers inside. Each
+		number will be a measure of some physical factor you must take in consideration while playing
+		our game. The small box, named the Stox (Stats-Box), will display gravitational acceleration,
+		velocity, speed, angular velocity, distance to the planet, and more.
+	</p>
+	<h2><b>Instructions</b></h2>
+	<p>
+		Use the "A" and "D" keys to steer left and right, respectively. Use the space button to advance, and the left shift key to reverse.
+		Be sure to observe the Stox! Use the Enter key to ender landing mode, which will relinquish control of the rocket.
+		Make 3 laps around the target in landing mode to win the game!
+	</p>
+	<a href="game.html"><b>Click here to begin!</b></a>
+
 </body>
 
 </html>

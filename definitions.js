@@ -48,8 +48,8 @@ function dbg(x) {
 const canvas = document.getElementById('screen');
 canvas.width = 1500;
 canvas.height = 1500;
-canvas.style.width = '750px';
-canvas.style.height = '750px';
+canvas.style.width = '650px';
+canvas.style.height = '650px';
 canvas.style.cursor = 'none';
 
 const cdims = v(canvas.width, canvas.height);

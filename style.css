@@ -1,8 +1,13 @@
 canvas {
-	border: 1pt solid black;
+	border: 5pt solid white;
 	display: block;
 	margin: auto;
-	width: 600px;
-	height: 600px;
 	padding: 0;
+	z-index: -100;
+}
+
+a {
+	text-decoration: none;
+	text-align: center;
+	margin: auto;
 }
